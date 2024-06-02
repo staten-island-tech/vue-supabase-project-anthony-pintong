@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import { onMounted } from 'vue'
+import Auth from '../components/Auth.vue'
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <Auth />
   </main>
 </template>
