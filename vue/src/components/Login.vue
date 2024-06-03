@@ -25,14 +25,14 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-const email = ref('')
-const password = ref('')
+const emailLogin = ref('')
+const passwordLogin = ref('')
 
 const login = async () => {
   try {
     const { user, error } = await supabase.auth.signInWithPassword({
-      email: email.value,
-      password: password.value,
+      email: emailLogin.value,
+      password: passwordLogin.value,
     })
 
     if (error) {
