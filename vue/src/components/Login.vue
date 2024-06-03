@@ -18,7 +18,6 @@
 
 <script>
 import { ref } from 'vue'
-
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = 'https://tiphlesxbpsbcravzisp.supabase.co'
@@ -26,45 +25,22 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-export default {
-  setup() {
-    const email = ref ("")
-    const password = ref ("")
-    const errorMessage = ref ("")
+const email = ref('')
+const password = ref('')
 
-    const login = async () => {
-      try {
-        const { data, error } = await supabase.auth.signUp({
-          email: email.value,
-          password: password.value,
-        })
+const login = async () => {
+  try {
+    const { user, error } = await supabase.auth.signInWithPassword({
+      email: email.value,
+      password: password.value,
+    })
 
-        if (error) {
-          errorMessage.value = error.message
-        } else {
-          console.log("Login successful:", data)
-        }
-      } catch (error) {
-        errorMessage.value = "Error ocurred during login"
-      }
+    if (error) {
+    } else {
+      console.log('Success:', user)
     }
-
-    return {
-      email,
-      password,
-      errorMessage,
-      login,
-    }
-
-
+  } catch (error) {
+    console.error('Error:', error)
   }
 }
-
-
-
-
 </script>
-
-<style lang="scss" scoped>
-
-</style>
