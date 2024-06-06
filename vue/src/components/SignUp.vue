@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Sign Up</h2>
-    <form @submit.prevent="signup">
+    <form @submit.prevent="signUp">
       <div>
         <label for="email">Email</label>
         <input id="email" type="email" v-model="email" required />
@@ -29,13 +29,17 @@ const email = ref('')
 const password = ref('')
 const router = useRouter()
 
-const signup = async () => {
-  const { data } = await supabase.auth.signUp({
+const signUp = async () => {
+  const { data, error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
   })
 
-  console.log('Sign up successful:', data)
-  router.push('/login')
+  if (error) {
+    console.error(error)
+  } else {
+    console.log('Sign up successful:', data)
+    router.push('/login')
+  }
 }
 </script>

@@ -22,11 +22,11 @@ const logout = async () => {
       console.error('Logout error:', error)
     } else {
       console.log('Logout successful')
-      localStorage.removeItem('isAuthenticated')
+      localStorage.removeItem('isLoggedin')
       router.push('/login')
     }
   } catch (error) {
-    console.error('Logout error:', error)
+    console.error(error)
   }
 }
 </script>

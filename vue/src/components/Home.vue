@@ -9,25 +9,34 @@
         To get started, please sign up for an account or log in if you already have one. Once logged in, ycan access the free tools and programs that will allow you to track your favorite stocks.
       </p>
       <ul class="links-container">
-        <li>
+        <li v-if="!isLoggedin">
           <RouterLink to="/signup">Sign Up</RouterLink>
         </li>
-        <li>
+        <li v-if="!isLoggedin">
           <RouterLink to="/login">Log In</RouterLink>
         </li>
-        <li>
+        <li v-if="isLoggedin">
+          <RouterLink to="/stock-search">Stock Search</RouterLink>
+        </li>
+        <li v-if="isLoggedin">
           <RouterLink to="/logout">Log Out</RouterLink>
         </li>
       </ul>
     </div>
     <div class="img-container">
-      <img src="https://example.com/stock-market-image.jpg" alt="Stock Market">
+      <img src="https://t4.ftcdn.net/jpg/01/80/00/87/360_F_180008799_LrxYrSZdSzhnnGFK7do33AZffgJz9owL.jpg" alt="Stock Market">
     </div>
   </div>
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router';
+import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
+import Watchlist from '../components/Watchlist.vue'
+
+const isLoggedin = computed(() => {
+  return localStorage.getItem('isLoggedin') === 'true'
+})
 </script>
 
 <style scoped>
