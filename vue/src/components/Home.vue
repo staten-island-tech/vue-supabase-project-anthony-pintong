@@ -1,41 +1,84 @@
-<script setup lang="ts">
-defineProps<{
-  msg: string
-}>()
-</script>
-
 <template>
-  <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
-      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>. What's next?
-    </h3>
+  <div class="home-container">
+    <div class="text-container">
+      <h1>Welcome to Our Stock Watcher Application</h1>
+      <p>
+        Our Stock Watcher application allows you to monitor and track your favorite stocks in real-time. Stay up to date with this ripoff.
+      </p>
+      <p>
+        To get started, please sign up for an account or log in if you already have one. Once logged in, ycan access the free tools and programs that will allow you to track your favorite stocks.
+      </p>
+      <ul class="links-container">
+        <li>
+          <RouterLink to="/signup">Sign Up</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/login">Log In</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/logout">Log Out</RouterLink>
+        </li>
+      </ul>
+    </div>
+    <div class="img-container">
+      <img src="https://example.com/stock-market-image.jpg" alt="Stock Market">
+    </div>
   </div>
 </template>
 
+<script setup>
+import { RouterLink } from 'vue-router';
+</script>
+
 <style scoped>
-h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
-  position: relative;
-  top: -10px;
+.home-container {
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  color: #333;
 }
 
-h3 {
-  font-size: 1.2rem;
+.text-container,
+.img-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.greetings h1,
-.greetings h3 {
+.text-container {
+  padding: 0 20px;
+}
+
+p {
+  max-width: 80%;
   text-align: center;
+  margin-bottom: 20px;
 }
 
-@media (min-width: 1024px) {
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
-  }
+.img-container img {
+  max-width: 100%;
+  max-height: 80vh;
+}
+
+.links-container {
+  margin-top: 20px;
+  list-style-type: none;
+  padding: 0;
+}
+
+.links-container li {
+  margin-bottom: 10px;
+}
+
+.links-container a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
 }
 </style>
