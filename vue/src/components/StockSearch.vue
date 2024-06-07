@@ -29,40 +29,42 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { createClient } from '@supabase/supabase-js'
+import { ref } from 'vue';
+import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://tiphlesxbpsbcravzisp.supabase.co'
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpcGhsZXN4YnBzYmNyYXZ6aXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTIyMzYzNjcsImV4cCI6MjAyNzgxMjM2N30.xSmje4zch2Z4urmZ_Kj3yx9qeuZe8_6guQnXk_bCtJ0'
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const symbol = ref('AAPL')
-const openCheckbox = ref(true)
-const highCheckbox = ref(true)
-const lowCheckbox = ref(true)
-const closeCheckbox = ref(true)
-const volumeCheckbox = ref(true)
-const resultsContainer = ref(null)
+const symbol = ref('AAPL');
+const openCheckbox = ref(true);
+const highCheckbox = ref(true);
+const lowCheckbox = ref(true);
+const closeCheckbox = ref(true);
+const volumeCheckbox = ref(true);
+const resultsContainer = ref(null);
 
 const fetchData = async () => {
   try {
-    const response = await fetch(`https://api.twelvedata.com/time_series?symbol=${symbol.value}&interval=1min&outputsize=1&apikey=929916a64d344125af4e6f6b6ee54b21`)
-    const data = await response.json()
-    console.log(data)
+    const response = await fetch(`https://api.twelvedata.com/time_series?symbol=${symbol.value}&interval=1min&outputsize=1&apikey=929916a64d344125af4e6f6b6ee54b21`);
+    const data = await response.json();
+    console.log(data);
 
     if (data.status === 'ok') {
-      Printx(data)
+      Printx(data);
+      console.log('Ticker saved good:', symbol.value);
+      await saveSearchToSupabase(symbol.value);
     } else {
-      resultsContainer.value.insertAdjacentHTML('afterbegin', '<p>Stock ticker is not valid.</p>')
+      resultsContainer.value.insertAdjacentHTML('afterbegin', '<p>Stock ticker is not valid.</p>');
     }
   } catch (error) {
-    console.error('Problem:', error.message)
+    console.error('Problem:', error.message);
   }
-}
+};
 
 const Printx = (data) => {
-  resultsContainer.value.innerHTML = ''
+  resultsContainer.value.innerHTML = '';
   data.values.forEach((x) => {
     let INSERTING = `
       <div class='cell'>
@@ -75,16 +77,32 @@ const Printx = (data) => {
           ${volumeCheckbox.value ? `<p>Volume: ${x.volume}</p>` : ''}
         </div>
       </div>
-    `
-    resultsContainer.value.insertAdjacentHTML('afterbegin', INSERTING)
-  })
-}
+    `;
+    resultsContainer.value.insertAdjacentHTML('afterbegin', INSERTING);
+  });
+};
 
-fetchData()
+const saveSearchToSupabase = async (ticker) => {
+  console.log('Saved:', ticker);
+  
+  const { data: { user } } = await supabase.auth.getUser();
+  console.log('User:', user);
+  
+  if (user) {
+    const { data, error } = await supabase
+      .from('search_history')
+      .insert({ user_id: user.id, symbol: ticker, timestamp: new Date().toISOString() });
+    
+    if (error) {
+      console.error('Error:', error);
+    } else {
+      console.log('Success:', data);
+    }
+  }
+};
 
-
+fetchData();
 </script>
-
 
 <style scoped>
 body {

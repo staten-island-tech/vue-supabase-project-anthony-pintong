@@ -6,7 +6,7 @@
         Our Stock Watcher application allows you to monitor and track your favorite stocks in real-time. Stay up to date with this ripoff.
       </p>
       <p>
-        To get started, please sign up for an account or log in if you already have one. Once logged in, ycan access the free tools and programs that will allow you to track your favorite stocks.
+        To get started, please sign up for an account or log in if you already have one. Once logged in, you can access the free tools and programs that will allow you to track your favorite stocks.
       </p>
       <ul class="links-container">
         <li v-if="!isLoggedin">
@@ -26,17 +26,20 @@
     <div class="img-container">
       <img src="https://t4.ftcdn.net/jpg/01/80/00/87/360_F_180008799_LrxYrSZdSzhnnGFK7do33AZffgJz9owL.jpg" alt="Stock Market">
     </div>
+    <div v-if="isLoggedin" class="watchlist-container">
+      <Watchlist />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { RouterLink } from 'vue-router'
+import { computed } from 'vue';
+import { RouterLink } from 'vue-router';
 import Watchlist from '../components/Watchlist.vue'
 
 const isLoggedin = computed(() => {
-  return localStorage.getItem('isLoggedin') === 'true'
-})
+  return localStorage.getItem('isLoggedin') === 'true';
+});
 </script>
 
 <style scoped>
@@ -46,6 +49,7 @@ const isLoggedin = computed(() => {
   padding: 0;
   margin: 0;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #f5f5f5;
@@ -89,5 +93,11 @@ p {
   text-decoration: none;
   color: #007bff;
   font-weight: bold;
+}
+
+.watchlist-container {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 500px;
 }
 </style>
