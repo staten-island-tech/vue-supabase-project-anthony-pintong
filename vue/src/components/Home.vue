@@ -17,16 +17,14 @@
         </li>
         <li v-if="isLoggedin">
           <RouterLink to="/stock-search">Stock Search</RouterLink>
-        </li>
-        <li v-if="isLoggedin">
-          <RouterLink to="/logout">Log Out</RouterLink>
-        </li>
+        </li> 
       </ul>
-    </div>    <button @click="logout">Log Out</button>
+    </div>    
     <div class="img-container">
       <img src="https://t4.ftcdn.net/jpg/01/80/00/87/360_F_180008799_LrxYrSZdSzhnnGFK7do33AZffgJz9owL.jpg" alt="Stock Market">
     </div>
     <div v-if="isLoggedin" class="watchlist-container">
+      <button @click="logout">Log Out</button>
       <Watchlist />
     </div>
   </div>
@@ -47,6 +45,11 @@ const router = useRouter()
 
 const isLoggedin = computed(() => {
   return localStorage.getItem('isLoggedin') === 'true'
+})
+
+const logout = async () => {
+  try {
+    const { error } = await supabase.auth.signOut()
     if (error) {
       console.error('Logout error:', error)
     } else {

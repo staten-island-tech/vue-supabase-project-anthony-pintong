@@ -43,3 +43,37 @@ const signUp = async () => {
   }
 }
 </script>
+
+<style>
+.form-container{
+  width: 90%;
+  max-width: 450px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #fff;
+  padding: 50px 60px 70px;
+  text-align: center;
+}
+.form-container h2{
+  font-size: 30px;
+  margin-bottom: 60px;
+  color: green;
+}
+.form-container h2::after{
+  content: '';
+  width: 50px;
+  height: 5px;
+  border-radius: 10rem;
+  background: green;
+  position: absolute;
+  bottom: 240px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+input {
+  margin-bottom: 5px;
+}
+</style>
