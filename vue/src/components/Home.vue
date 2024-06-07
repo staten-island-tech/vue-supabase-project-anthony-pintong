@@ -119,5 +119,7 @@ p {
   margin-top: 20px;
   width: 100%;
   max-width: 500px;
+  max-height: 300px; 
+  overflow-y: auto; 
 }
 </style>

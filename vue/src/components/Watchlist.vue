@@ -1,12 +1,12 @@
 <template>
     <div>
         <h2>Watchlist</h2>
+        <p>This is a basic watchlist that displays your previously searched stocks.</p>
         <ul>
             <li v-for="item in watchlist" :key="item.id" @click="viewStockData(item.symbol)">
                 {{ item.symbol }}
             </li>
         </ul>
-        <p>This is a basic watchlist that displays your previously searched stocks.</p>
     </div>
 </template>
 
