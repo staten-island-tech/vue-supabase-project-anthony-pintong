@@ -1,17 +1,17 @@
 <template>
-  <div>
+  <div class="container">
+    <div class="form-container">
     <h2>Sign Up</h2>
     <form @submit.prevent="signUp">
-      <div>
-        <label for="email">Email</label>
-        <input id="email" type="email" v-model="email" required />
+      <div class="input">
+        <input id="email" type="email" placeholder="Email" v-model="email" required />
       </div>
       <div>
-        <label for="password">Password</label>
-        <input id="password" type="password" v-model="password" required />
+        <input id="password" type="password" placeholder="Password" v-model="password" required />
       </div>
-      <button type="submit">Sign Up</button>
+      <button type="submit">Sign Up</button> <p>Already have an account? <RouterLink to="/login">Log in!</RouterLink></p>
     </form>
+    </div>
   </div>
 </template>
 

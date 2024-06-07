@@ -22,7 +22,7 @@
           <RouterLink to="/logout">Log Out</RouterLink>
         </li>
       </ul>
-    </div>
+    </div>    <button @click="logout">Log Out</button>
     <div class="img-container">
       <img src="https://t4.ftcdn.net/jpg/01/80/00/87/360_F_180008799_LrxYrSZdSzhnnGFK7do33AZffgJz9owL.jpg" alt="Stock Market">
     </div>
@@ -33,18 +33,35 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { RouterLink } from 'vue-router';
+import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
+import { createClient } from '@supabase/supabase-js'
 import Watchlist from '../components/Watchlist.vue'
 
+const supabaseUrl = 'https://tiphlesxbpsbcravzisp.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpcGhsZXN4YnBzYmNyYXZ6aXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTIyMzYzNjcsImV4cCI6MjAyNzgxMjM2N30.xSmje4zch2Z4urmZ_Kj3yx9qeuZe8_6guQnXk_bCtJ0'
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
+const router = useRouter()
+
 const isLoggedin = computed(() => {
-  return localStorage.getItem('isLoggedin') === 'true';
-});
+  return localStorage.getItem('isLoggedin') === 'true'
+    if (error) {
+      console.error('Logout error:', error)
+    } else {
+      console.log('Logout successful')
+      localStorage.removeItem('isLoggedin')
+      router.push('/login')
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
 </script>
 
 <style scoped>
 .home-container {
-  width: 100vw;
   height: 100vh;
   padding: 0;
   margin: 0;

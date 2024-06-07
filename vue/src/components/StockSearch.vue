@@ -1,4 +1,5 @@
 <template>
+      <button @click="logout">Log Out</button>
   <div class="top">
     <div class="search-container">
       <form @submit.prevent="fetchData">
@@ -29,21 +30,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { createClient } from '@supabase/supabase-js';
+import { ref } from 'vue'
+import { createClient } from '@supabase/supabase-js'
+import { useRouter } from 'vue-router'
 
 const supabaseUrl = 'https://tiphlesxbpsbcravzisp.supabase.co'
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpcGhsZXN4YnBzYmNyYXZ6aXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTIyMzYzNjcsImV4cCI6MjAyNzgxMjM2N30.xSmje4zch2Z4urmZ_Kj3yx9qeuZe8_6guQnXk_bCtJ0'
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const symbol = ref('AAPL');
-const openCheckbox = ref(true);
-const highCheckbox = ref(true);
-const lowCheckbox = ref(true);
-const closeCheckbox = ref(true);
-const volumeCheckbox = ref(true);
-const resultsContainer = ref(null);
+const symbol = ref('AAPL')
+const openCheckbox = ref(true)
+const highCheckbox = ref(true)
+const lowCheckbox = ref(true)
+const closeCheckbox = ref(true)
+const volumeCheckbox = ref(true)
+const resultsContainer = ref(null)
+const router = useRouter()
 
 const fetchData = async () => {
   try {
@@ -77,10 +80,27 @@ const Printx = (data) => {
           ${volumeCheckbox.value ? `<p>Volume: ${x.volume}</p>` : ''}
         </div>
       </div>
-    `;
-    resultsContainer.value.insertAdjacentHTML('afterbegin', INSERTING);
-  });
-};
+    `
+    resultsContainer.value.insertAdjacentHTML('afterbegin', INSERTING)
+  })
+}
+
+const logout = async () => {
+  try {
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      console.error('Logout error:', error)
+    } else {
+      console.log('Logout successful')
+      localStorage.removeItem('isLoggedin')
+      router.push('/login')
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+fetchData()
 
 const saveSearchToSupabase = async (ticker) => {
   console.log('Saved:', ticker);

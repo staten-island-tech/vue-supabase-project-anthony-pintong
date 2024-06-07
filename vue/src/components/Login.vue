@@ -1,17 +1,17 @@
 <template>
-  <div>
+  <div class="container">
+    <div class="form-container">
     <h2>Login</h2>
     <form @submit.prevent="login">
-      <div>
-        <label for="email">Email</label>
-        <input id="email" type="email" v-model="email" required />
+      <div class="input">
+        <input id="email" type="email" placeholder="Email" v-model="email" required />
       </div>
       <div>
-        <label for="password">Password</label>
-        <input id="password" type="password" v-model="password" required />
+        <input id="password" type="password" placeholder="Password" v-model="password" required />
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">Login</button> <p>Don't have an account? <RouterLink to="/signup">Sign Up!</RouterLink></p>
     </form>
+    </div>
   </div>
 </template>
 
@@ -44,3 +44,37 @@ const login = async () => {
   }
 }
 </script>
+
+<style>
+.form-container{
+  width: 90%;
+  max-width: 450px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #fff;
+  padding: 50px 60px 70px;
+  text-align: center;
+}
+.form-container h2{
+  font-size: 30px;
+  margin-bottom: 60px;
+  color: green;
+}
+.form-container h2::after{
+  content: '';
+  width: 50px;
+  height: 5px;
+  border-radius: 10rem;
+  background: green;
+  position: absolute;
+  bottom: 240px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+input {
+  margin-bottom: 5px;
+}
+</style>
