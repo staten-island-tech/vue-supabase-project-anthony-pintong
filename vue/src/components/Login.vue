@@ -1,46 +1,45 @@
 <template>
   <div class="container">
     <div class="form-container">
-    <h2>Login</h2>
-    <form @submit.prevent="login">
-      <div class="input">
-        <input id="email" type="email" placeholder="Email" v-model="email" required />
-      </div>
-      <div>
-        <input id="password" type="password" placeholder="Password" v-model="password" required />
-      </div>
-      <button type="submit">Login</button> <p>Don't have an account? <RouterLink to="/signup">Sign Up!</RouterLink></p>
-    </form>
+      <h2>Login</h2>
+      <form @submit.prevent="login">
+        <div class="input">
+          <input id="email" type="email" placeholder="Email" v-model="email" required />
+        </div>
+        <div>
+          <input id="password" type="password" placeholder="Password" v-model="password" required />
+        </div>
+        <button type="submit">Login</button>
+        <p>Don't have an account? <RouterLink to="/signup">Sign Up!</RouterLink></p>
+      </form>
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { createClient } from '@supabase/supabase-js'
 import { useRouter } from 'vue-router'
-
-const supabaseUrl = 'https://tiphlesxbpsbcravzisp.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpcGhsZXN4YnBzYmNyYXZ6aXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTIyMzYzNjcsImV4cCI6MjAyNzgxMjM2N30.xSmje4zch2Z4urmZ_Kj3yx9qeuZe8_6guQnXk_bCtJ0'
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+import { useAuthStore } from '../stores/auth.ts'
 
 const email = ref('')
 const password = ref('')
+const errorMessage = ref('')
+const successMessage = ref('')
 const router = useRouter()
+const authStore = useAuthStore()
 
 const login = async () => {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: email.value,
-    password: password.value,
-  })
-
-  if (error) {
-    console.error(error)
-  } else {
-    console.log('Login successful:', data)
-    localStorage.setItem('isLoggedin', 'true')
-    router.push('/stock-search')
+  try {
+    await authStore.loginUser(email.value, password.value)
+    successMessage.value = 'Login successful. Redirecting...'
+    setTimeout(() => {
+      router.push('/stock-search')
+    }, 2000)
+  } catch (error) {
+    console.error('Error:', error)
+    errorMessage.value = 'Invalid login credentials'
   }
 }
 </script>
@@ -76,5 +75,15 @@ const login = async () => {
 
 input {
   margin-bottom: 5px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
+  margin-top: 10px;
 }
 </style>

@@ -1,5 +1,4 @@
 <template>
-      <button @click="logout">Log Out</button>
   <div class="top">
     <div class="search-container">
       <form @submit.prevent="fetchData">
@@ -31,22 +30,17 @@
 
 <script setup>
 import { ref } from 'vue'
-import { createClient } from '@supabase/supabase-js'
-import { useRouter } from 'vue-router'
+import { supabase } from '../supabase'
 
-const supabaseUrl = 'https://tiphlesxbpsbcravzisp.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpcGhsZXN4YnBzYmNyYXZ6aXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTIyMzYzNjcsImV4cCI6MjAyNzgxMjM2N30.xSmje4zch2Z4urmZ_Kj3yx9qeuZe8_6guQnXk_bCtJ0'
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-const symbol = ref('AAPL')
+const symbol = ref('')
 const openCheckbox = ref(true)
 const highCheckbox = ref(true)
 const lowCheckbox = ref(true)
 const closeCheckbox = ref(true)
 const volumeCheckbox = ref(true)
-const resultsContainer = ref(null)
-const router = useRouter()
+const resultsContainer = ref()
+
+const errorMessage = ref('')
 
 const fetchData = async () => {
   try {
@@ -58,13 +52,15 @@ const fetchData = async () => {
       Printx(data);
       console.log('Ticker saved good:', symbol.value);
       await saveSearchToSupabase(symbol.value);
+      errorMessage.value = ''
     } else {
-      resultsContainer.value.insertAdjacentHTML('afterbegin', '<p>Stock ticker is not valid.</p>');
+      errorMessage.value = 'Enter a valid stock ticker'
     }
   } catch (error) {
     console.error('Problem:', error.message);
+    errorMessage.value = 'Fetch Stock Data Error'
   }
-};
+}
 
 const Printx = (data) => {
   resultsContainer.value.innerHTML = '';
@@ -85,20 +81,6 @@ const Printx = (data) => {
   })
 }
 
-const logout = async () => {
-  try {
-    const { error } = await supabase.auth.signOut()
-    if (error) {
-      console.error('Logout error:', error)
-    } else {
-      console.log('Logout successful')
-      localStorage.removeItem('isLoggedin')
-      router.push('/login')
-    }
-  } catch (error) {
-    console.error(error)
-  }
-}
 
 fetchData()
 
@@ -178,5 +160,11 @@ h1 {
   margin: 20px auto;
   padding: 20px;
   border-radius: 5px;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
 }
 </style>

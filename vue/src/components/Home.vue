@@ -34,31 +34,22 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useRouter } from 'vue-router'
-import { createClient } from '@supabase/supabase-js'
+import { useAuthStore } from '../stores/auth.ts'
 import Watchlist from '../components/Watchlist.vue'
 
-const supabaseUrl = 'https://tiphlesxbpsbcravzisp.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpcGhsZXN4YnBzYmNyYXZ6aXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTIyMzYzNjcsImV4cCI6MjAyNzgxMjM2N30.xSmje4zch2Z4urmZ_Kj3yx9qeuZe8_6guQnXk_bCtJ0'
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
 const router = useRouter()
+const authStore = useAuthStore()
 
 const isLoggedin = computed(() => {
-  return localStorage.getItem('isLoggedin') === 'true'
+  return authStore.currentUser !== null
 })
 
 const logout = async () => {
   try {
-    const { error } = await supabase.auth.signOut()
-    if (error) {
-      console.error('Logout error:', error)
-    } else {
-      console.log('Logout successful')
-      localStorage.removeItem('isLoggedin')
-      router.push('/login')
-    }
+    await authStore.logoutUser()
+    router.push('/login')
   } catch (error) {
-    console.error(error)
+    console.error('Error:', error)
   }
 }
 </script>
