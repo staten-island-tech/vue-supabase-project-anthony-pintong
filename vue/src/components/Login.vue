@@ -20,26 +20,32 @@
 
 <script setup>
 import { ref } from 'vue'
+import { createClient } from '@supabase/supabase-js'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth.ts'
+const supabaseUrl = 'https://tiphlesxbpsbcravzisp.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpcGhsZXN4YnBzYmNyYXZ6aXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTIyMzYzNjcsImV4cCI6MjAyNzgxMjM2N30.xSmje4zch2Z4urmZ_Kj3yx9qeuZe8_6guQnXk_bCtJ0'
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
 const successMessage = ref('')
 const router = useRouter()
-const authStore = useAuthStore()
 
 const login = async () => {
-  try {
-    await authStore.loginUser(email.value, password.value)
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.value,
+    password: password.value,
+  })
+  if (error) {
+    console.error('Error:', error)
+    errorMessage.value = 'Invalid login credentials. Please try again.'
+  } else {
     successMessage.value = 'Login successful. Redirecting...'
     setTimeout(() => {
       router.push('/stock-search')
     }, 2000)
-  } catch (error) {
-    console.error('Error:', error)
-    errorMessage.value = 'Invalid login credentials'
+    localStorage.setItem('isLoggedin', 'true')
   }
 }
 </script>
@@ -72,16 +78,13 @@ const login = async () => {
   left: 50%;
   transform: translateX(-50%);
 }
-
 input {
   margin-bottom: 5px;
 }
-
 .error-message {
   color: red;
   margin-top: 10px;
 }
-
 .success-message {
   color: green;
   margin-top: 10px;

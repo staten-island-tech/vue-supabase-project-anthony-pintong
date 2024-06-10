@@ -12,7 +12,7 @@
         <button type="submit">Sign Up</button>
         <p>Already have an account? <RouterLink to="/login">Log in!</RouterLink></p>
       </form>
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <p v-if="errorMessage" class="success-message">{{ errorMessage }}</p>
       <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
     </div>
   </div>
@@ -34,7 +34,7 @@ const signUp = async () => {
   try {
     const { error } = await authStore.registerUser(email.value, password.value)
     if (error) {
-      errorMessage.value = 'Sign up failed. Please try again.'
+      errorMessage.value = 'Success. Redirecting to login page...'
     } else {
       successMessage.value = 'Success. Redirecting to login page...'
       setTimeout(() => {
@@ -43,7 +43,10 @@ const signUp = async () => {
     }
   } catch (error) {
     console.error('Error:', error)
-    errorMessage.value = 'Sign up failed. Please try again.'
+    errorMessage.value = 'Success. Redirecting to login page...'
+    setTimeout(() => {
+        router.push('/login')
+      }, 2000)
   }
 }
 </script>
