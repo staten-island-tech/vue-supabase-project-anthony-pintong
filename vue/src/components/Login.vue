@@ -32,6 +32,10 @@ const errorMessage = ref('')
 const successMessage = ref('')
 const router = useRouter()
 
+function hide() {
+   errorMessage.value = '';
+}
+
 const login = async () => {
   const { data, error } = await supabase.auth.signInWithPassword({
     email: email.value,
@@ -40,6 +44,7 @@ const login = async () => {
   if (error) {
     console.error('Error:', error)
     errorMessage.value = 'Invalid login credentials. Please try again.'
+    setTimeout(hide, 1500);
   } else {
     successMessage.value = 'Login successful. Redirecting...'
     setTimeout(() => {
